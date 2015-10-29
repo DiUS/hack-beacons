@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic', 'ngCordovaBeacon'])
+angular.module('starter', ['ionic', 'ngCordovaBeacon', 'firebase'])
 
 .run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
@@ -16,15 +16,21 @@ angular.module('starter', ['ionic', 'ngCordovaBeacon'])
   });
 })
 
-.controller("MainController", function($scope, $rootScope, $ionicPlatform, $cordovaBeacon) {
+.controller("MainController", function($scope, $rootScope, $ionicPlatform, $cordovaBeacon, Items) {
 
     $scope.beacons = {};
+
+    // $scope.firebaseData = Items;
+
+    Items.$bindTo($scope, "data");
+
 
     $ionicPlatform.ready(function() {
 
         $cordovaBeacon.requestWhenInUseAuthorization();
 
         $rootScope.$on("$cordovaBeacon:didRangeBeaconsInRegion", function(event, pluginResult) {
+          console.log('AAAAAAAAAA');
             var uniqueBeaconKey;
             for(var i = 0; i < pluginResult.beacons.length; i++) {
                 uniqueBeaconKey = pluginResult.beacons[i].uuid + ":" + pluginResult.beacons[i].major + ":" + pluginResult.beacons[i].minor;
@@ -36,4 +42,10 @@ angular.module('starter', ['ionic', 'ngCordovaBeacon'])
         $cordovaBeacon.startRangingBeaconsInRegion($cordovaBeacon.createBeaconRegion("dius-beacon", "B9407F30-F5F8-466E-AFF9-25556B57FE6D"));
 
     });
+})
+
+.factory("Items", function($firebaseObject) {
+    var itemsRef = new Firebase("https://hack-beacons.firebaseio.com");
+    console.log("Items Array: ", itemsRef);
+    return $firebaseObject(itemsRef);
 });
