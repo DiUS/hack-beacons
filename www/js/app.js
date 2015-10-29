@@ -36,7 +36,7 @@ angular.module('starter', ['ionic'])
             $scope.$apply();
         });
 
-        $cordovaBeacon.startRangingBeaconsInRegion($cordovaBeacon.createBeaconRegion("dius-beacon", "xxxx"));
+        $cordovaBeacon.startRangingBeaconsInRegion($cordovaBeacon.createBeaconRegion("dius-beacon", "B9407F30-F5F8-466E-AFF9-25556B57FE6D"));
 
     });
 });
