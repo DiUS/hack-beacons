@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic', 'ngCordovaBeacon', 'firebase'])
+angular.module('starter', ['ionic', 'ngCordova', 'ngCordovaBeacon', 'firebase'])
 
 .run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
@@ -16,14 +16,11 @@ angular.module('starter', ['ionic', 'ngCordovaBeacon', 'firebase'])
   });
 })
 
-.controller("MainController", function($scope, $rootScope, $ionicPlatform, $cordovaBeacon, Items) {
+.controller("MainController", function($scope, $rootScope, $ionicPlatform, $cordovaBeacon, Items, $cordovaDevice) {
 
     $scope.beacons = {};
 
-    // $scope.firebaseData = Items;
-
     Items.$bindTo($scope, "data");
-
 
     $ionicPlatform.ready(function() {
 
@@ -40,6 +37,11 @@ angular.module('starter', ['ionic', 'ngCordovaBeacon', 'firebase'])
         $rootScope.$on("$cordovaBeacon:didDetermineStateForRegion", function(event, pluginResult) {
           $scope.stateResult = JSON.stringify(pluginResult);
           $scope.$apply();
+          if(pluginResult.state === 'CLRegionStateInside') {
+            $scope.data[$cordovaDevice.getUUID()] = 'Got In!';
+          } else {
+            $scope.data[$cordovaDevice.getUUID()] = 'Got out!';
+          }
         });
 
         $rootScope.$on("$cordovaBeacon:didStartMonitoringForRegion", function(event, pluginResult) {
