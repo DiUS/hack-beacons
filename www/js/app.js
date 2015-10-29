@@ -42,6 +42,10 @@ angular.module('starter', ['ionic', 'ngCordovaBeacon', 'firebase'])
         $cordovaBeacon.startRangingBeaconsInRegion($cordovaBeacon.createBeaconRegion("dius-beacon", "B9407F30-F5F8-466E-AFF9-25556B57FE6D"));
 
     });
+
+    $scope.addValue = function() {
+      $scope.data[$scope.key] = $scope.value
+    }
 })
 
 .factory("Items", function($firebaseObject) {
