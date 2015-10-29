@@ -28,18 +28,26 @@ angular.module('starter', ['ionic', 'ngCordovaBeacon', 'firebase'])
     $ionicPlatform.ready(function() {
 
         $cordovaBeacon.requestWhenInUseAuthorization();
+        $cordovaBeacon.requestAlwaysAuthorization();
+
+        var region = $cordovaBeacon.createBeaconRegion("dius-beacon", "B9407F30-F5F8-466E-AFF9-25556B57FE6D");
 
         $rootScope.$on("$cordovaBeacon:didRangeBeaconsInRegion", function(event, pluginResult) {
-          console.log('AAAAAAAAAA');
-            var uniqueBeaconKey;
-            for(var i = 0; i < pluginResult.beacons.length; i++) {
-                uniqueBeaconKey = pluginResult.beacons[i].uuid + ":" + pluginResult.beacons[i].major + ":" + pluginResult.beacons[i].minor;
-                $scope.beacons[uniqueBeaconKey] = pluginResult.beacons[i];
-            }
+            $scope.rangeResult = JSON.stringify(pluginResult);
             $scope.$apply();
         });
 
-        $cordovaBeacon.startRangingBeaconsInRegion($cordovaBeacon.createBeaconRegion("dius-beacon", "B9407F30-F5F8-466E-AFF9-25556B57FE6D"));
+        $rootScope.$on("$cordovaBeacon:didDetermineStateForRegion", function(event, pluginResult) {
+          $scope.stateResult = JSON.stringify(pluginResult);
+          $scope.$apply();
+        });
+
+        $rootScope.$on("$cordovaBeacon:didStartMonitoringForRegion", function(event, pluginResult) {
+            $scope.result = JSON.stringify(pluginResult);
+            $scope.$apply();
+        });
+        $cordovaBeacon.startRangingBeaconsInRegion(region);
+        $cordovaBeacon.startMonitoringForRegion(region);
 
     });
 

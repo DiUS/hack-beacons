@@ -32,10 +32,16 @@
 
     <ion-pane>
       <ion-header-bar class="bar-stable">
-        <h1 class="title">Ionic Blank Starter</h1>
+        <h1 class="title">Dihouse</h1>
       </ion-header-bar>
       <ion-content ng-controller="MainController">
         <h1>Hacking</h1>
+        <h3>Monitoring</h3>
+        <p>{{result}}</p>
+        <h3>State</h3>
+        <p>{{stateResult}}</p>
+        <h3>Range</h3>
+        <p>{{rangeResult}}</p>
         <div class="list">
             <div class="item" ng-repeat="(key, value) in beacons">
                 <div class="row">
